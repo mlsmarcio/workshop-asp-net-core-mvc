@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SalesWebMvc
+namespace WebApplication1
 {
     public class Program
     {

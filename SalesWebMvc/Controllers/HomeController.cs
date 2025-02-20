@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SalesWebMvc.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication1.Models;
 
-namespace SalesWebMvc.Controllers
+namespace WebApplication1.Controllers
 {
     public class HomeController : Controller
     {
@@ -18,7 +18,7 @@ namespace SalesWebMvc.Controllers
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
+            ViewData["Name"] = "Márcio Lopes - Analista e Desenvolvedor de Software";
             return View();
         }
 
