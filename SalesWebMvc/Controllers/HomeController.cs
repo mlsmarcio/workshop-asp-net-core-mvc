@@ -19,6 +19,7 @@ namespace WebApplication1.Controllers
         {
             ViewData["Message"] = "Your application description page.";
             ViewData["Name"] = "Márcio Lopes - Analista e Desenvolvedor de Software";
+            ViewData["Professor"] = "Nelio Alves";
             return View();
         }
 
