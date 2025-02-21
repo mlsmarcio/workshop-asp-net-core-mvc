@@ -1,12 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+using SalesWebMvc.Models.ViewModels;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using WebApplication1.Models;
 
-namespace WebApplication1.Controllers
+namespace SalesWebMvc.Controllers
 {
     public class HomeController : Controller
     {
