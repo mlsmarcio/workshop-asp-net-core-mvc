@@ -124,5 +124,53 @@ namespace WebApplication1
             
             Será executada e gerará o banco de dados
 
+    4 - Alterar o tema do bootstrap
+        - Acessar o site https://bootswatch.com/3
+        - Em temas, selecionar o tema desejado
+        - No menu do tema, selecionar o arquivo bootstrap.css
+        - Salvar como no diretório wwwroot\lib\bootstrap\dist\css\bootstrap-NOME_TEMA.css
+        - Modificar o arquivo Views\Shared\_Layout.cshtml para referência ao novo arquivo css
+
+   5 - Adicionando novas entidades e segunda migration
+        - Adicionar a classe em Models
+            - Adicionar um Enum
+                - Na pasta Models, adicionar uma pasta Enums
+            - Adicionar os atributos básicos
+            - Adicionar Associações
+                Um departamento têm n vendedores, então, na classe Departamento, criar um ICollection de Vendedores:
+                    public ICollection<Seller> Sellers { get; set; } = new List<Seller>();
+
+                Um vendedor possui um departamento, então, adicionar o atributo departamento na classe Vendedor:
+                    public Department Department { get; set; }
+                
+                Um vendedor possui n Registros de vendas, adicionar uma coleção de registros na classe Vendedor
+                    public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();
+                
+                Um RegistroDeVendas possui um vendedor, implementar a associação com a propriedade na classe RegistroDeVendas
+                    public Seller Seller { get; set; }
+                
+            - Adicionar Contrutores, padrão e com argumentos
+                - O Framework precisa do construtor vasio, default.
+                - Adicionar o construtor com parâmetros, mas, não incluir os atributos que são coleções.
+        
+            - Adicionar os métodos, operações das classes
+                - Utilizar linq para obter o total de vendas de um vendedor em um intervalo de datas
+                    return Sales.Where(sr => sr.Date >= initial && sr.Date <= final)    //Seleciona os registros do período
+                                .Sum(sr => sr.Amount); 
+
+        - Adiconar DbSet's in DbContext
+            Na classe Data.SalesWebMvcContext.cs adicionar as propriedades correspondentes as entidades
+                public DbSet<Seller> Seller { get; set; }
+                public DbSet<SalesRecord> SalesRecord { get; set; }
+
+        - Adicionar uma Migration para as novas entidades
+            Na aba, Package Manager Console
+                Add-Migration OtherEntities
+                - O sistema criará o arquivo da Migration na pasta correspondente
+
+        - Atualizar o banco de dados com o comando:
+            Update-Database
+            (verificar se o serviço mysql está em execução)
+
  *  ===============================================
  */
