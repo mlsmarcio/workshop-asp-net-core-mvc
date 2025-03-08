@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
+using SalesWebMvc.Data;
 
 namespace WebApplication1
 {
@@ -41,14 +42,17 @@ namespace WebApplication1
                 builder.MigrationsAssembly("SalesWebMvc")));
             //        options.UseSqlServer(Configuration.GetConnectionString("SalesWebMvcContext")));
 
+            // REGISTRANDO O SERVIÇO NO SISTEMA DE INJEÇÃO DE DEPENDÊNCIA DA APLICAÇÃO - POPULA A BASE DE DADOS
+            services.AddScoped<SeedingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                seedingService.Seed();
             }
             else
             {
@@ -172,5 +176,28 @@ namespace WebApplication1
             Update-Database
             (verificar se o serviço mysql está em execução)
 
+    6 - Criando um serviço para popular a base de dados, usando injeção de dependência
+        - No mysql Work Brench, exclua o banco de dados
+        - Execute as migrations
+                No Package Manager Console
+                - Update-Database
+        - Stop o IIS
+        - Criar a classe SeedingService na pasta Data
+        - Registrar essa classe no sistema de injeção de dependência da aplicação, em Startup.cs
+            Permite que esse serviço seja injetado na aplicação e que outros serviços sejam injetados nele.
+            No método ConfigureServices adicionar:
+                services.AddScoped<SeedingService>();
+        
+        - Implementar a classe SeedingService
+            - Criar uma referência ao Context da aplicação
+            - Receber um Context no construtor
+            - Criar o método que realiza a operação de popular a base de dados
+                - Textar se existe algum registro na base de dados, se não existir, popular as tabelas
+                - Criar os objetos com dados para popular o BD
+                - Utilizar o objeto _context para adicionar os registros
+            
+        - Fazer a chamada desse método em Startup.cs
+            - No método Configure, adicionar o parâmetro do tipo SeedingService
+            - Quando a execução estiver em modo de desenvolvimento chame o método
  *  ===============================================
  */
