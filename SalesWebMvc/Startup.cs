@@ -198,6 +198,27 @@ namespace WebApplication1
             
         - Fazer a chamada desse método em Startup.cs
             - No método Configure, adicionar o parâmetro do tipo SeedingService
+                public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
+
             - Quando a execução estiver em modo de desenvolvimento chame o método
+                seedingService.Seed();
+
+    7 - Criar o Controlador de Vendedores, Link na página Home e Views.
+        
+        - Criar os Links para departamentos e vendedores
+            Em, views, shared, _Layout.cshtml
+                - O atributo asp-controller deve receber o nome que consta no Controller correspondente: 
+                    ex.: Departments para o controller DepartmentsController
+                    <li><a asp-area="" asp-controller="Departments" asp-action="Index">Departments</a></li>
+
+        - Criando o Controller de Sellers 'Vendedores'
+            - Botão direito na pasta Controllers, Add... Controller...
+            - Colocar o nome correspondente ao Link Criado, no atributo asp-controller ex.: Sellers então SellersController
+            - Criar a página de Index, na pasta views
+                - Criar a pasta Sellers na pasta Views (deve ser igual ao nome no controlador) 
+                
+            
+            
+
  *  ===============================================
  */
