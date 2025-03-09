@@ -62,7 +62,7 @@ namespace SalesWebMvc.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<DateTime>("dateTime");
+                    b.Property<DateTime>("BirthDate");
 
                     b.HasKey("Id");
 

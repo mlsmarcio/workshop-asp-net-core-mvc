@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using SalesWebMvc.Data;
+using SalesWebMvc.Services;
 
 namespace WebApplication1
 {
@@ -44,6 +45,9 @@ namespace WebApplication1
 
             // REGISTRANDO O SERVIÇO NO SISTEMA DE INJEÇÃO DE DEPENDÊNCIA DA APLICAÇÃO - POPULA A BASE DE DADOS
             services.AddScoped<SeedingService>();
+
+            // REGISTRANDO O SERVIÇO SellerService
+            services.AddScoped<SellerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -203,7 +207,7 @@ namespace WebApplication1
             - Quando a execução estiver em modo de desenvolvimento chame o método
                 seedingService.Seed();
 
-    7 - Criar o Controlador de Vendedores, Link na página Home e Views.
+    7 - Criar o Controlador de Vendedores (Sellers), Link na página Home e Views.
         
         - Criar os Links para departamentos e vendedores
             Em, views, shared, _Layout.cshtml
@@ -218,7 +222,47 @@ namespace WebApplication1
                 - Criar a pasta Sellers na pasta Views (deve ser igual ao nome no controlador) 
                 
             
+    8 - Criando a classe de serviço de vendedores - SellersService
+    
+        - Criar a pasta de serviços no projeto, botão direito no projeto, new folder, nomear como Services
+        - Criar a classe de serviço SellerService na pasta de serviços
+        - Registrar em Startup.cs no método ConfigureServices o serviço na injeção de dependência do sistema
+            services.AddScoped<SellerService>();
+        - Implementar um método que retorne todos os vendedores no serviço criado
             
+            Criar o atributo e o construtor:
+                private readonly SalesWebMvcContext _context;
+    
+                public SellerService(SalesWebMvcContext context)
+                {
+                    _context = context;
+                }
+
+            Criar o método
+                public List<Seller> FindAll()
+                {
+                    return _context.Seller.ToList();
+                }
+
+        - No controller implementar o método Index que deve chamar o método FindAll 
+            - Criar uma dependência para o SellerService, um atributo deste tipo
+            
+            - Utilizar este objeto no método Index para criar uma lista de Sellers (vendedores)
+            - Passar a lista criada como parâmetro para o método View que vai gerar um IActionResult 
+
+        - Na página Index escrever um código de template para exibir a lista de vendedores
+            - No arquivo Views/Sellers/Index.cshtml, Criar um objeto @model para obter os dados (lista) e mostrar na tela
+                @model IEnumerable<SalesWebMvc.Models.Seller>
+
+            - Criar uma tabela e bootstrap para exibir os dados
+                @Html.DisplayNameFor(model => model.Name)  - obtém o nome do campo, ou simplesmente digite 'Name'
+                
+                @foreach (var item in Model)
+                        { 
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
 
  *  ===============================================
  */
