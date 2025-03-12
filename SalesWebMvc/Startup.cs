@@ -264,5 +264,44 @@ namespace WebApplication1
                                     @Html.DisplayFor(modelItem => item.Name)
                                 </td>
 
+    9 - Criando o Formulário de cadastro de Vendedores
+        - Em Views/Sellers/Index, acrescentar um link para uma ação Create
+            <p>
+                <a asp-action="Create" class="btn btn-default">Create New</a>
+            </p>
+
+        - No controller, implementar a ação Create, por padrão a ação será o método GET
+             public IActionResult Create() 
+            {
+                return View();
+            }
+
+        - Na Views/Sellers, Criar a view "Create"
+            - Botão direito na pasta Sellers, Add, view...
+            - O nome da view deve ser igual ao nome da ação criada no SellersController, ex.: Create, template vazio.
+            - Com esses passos já é possível testar se a view Create está sendo chamada
+            - Desenhar o html para a view 'tela de cadastro'
+            - Criar a referencia ao @model para que o formulário utilize este objeto
+                @model SalesWebMvc.Models.Seller
+                asp-for="Name"  
+        
+        - Em Services/SellerService, criar o método Insert
+            public void Insert(Seller obj)
+            {
+                _context.Add(obj);
+                _context.SaveChanges();
+            }
+        
+        - No Controller, implementar a ação Create (POST)
+
+            [HttpPost] // DEFINE QUE A AÇÃO É POST
+            [ValidateAntiForgeryToken] // PREVINE DE ATAQUES CSRF (Quando alguém aproveita sua sessão e envia dados de ataque)
+            public IActionResult Create(Seller seller)
+            {
+                _sellerService.Insert(seller);
+                return RedirectToAction(nameof(Index)); // Direciona para página Index
+            }
+
+
  *  ===============================================
  */
