@@ -303,5 +303,19 @@ namespace WebApplication1
             }
 
 
+    10 - Implementando integridade referêncial - Chave estrangeira na tabela de Vendedores -> Departamento
+        
+        - Em Seller, adicionar uma propriedade DepartmentId, então o framework vai detectar que é uma chave estrangeira
+          pelo nome Department.
+    
+        - Drop database - Excluir a base de dados
+            - No Package Manager Console - criar uma nova migration
+              - Add-Migration DepartmentForeignKey
+              - Executar as Migration
+                - Update-Database
+              - Para o IISEXPRESS
+              - Rodar a aplicação para popular a base de dados
+                 - Haverá um erro da integridade referencial porque a tela de cadastro não contém o campo departamento para seleção
+              
  *  ===============================================
  */
