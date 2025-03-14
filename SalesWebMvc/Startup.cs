@@ -48,6 +48,9 @@ namespace WebApplication1
 
             // REGISTRANDO O SERVIÇO SellerService
             services.AddScoped<SellerService>();
+
+            // REGISTRANDO O SERVIÇO DEPARTMENT
+            services.AddScoped<DepartmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -311,11 +314,44 @@ namespace WebApplication1
         - Drop database - Excluir a base de dados
             - No Package Manager Console - criar uma nova migration
               - Add-Migration DepartmentForeignKey
-              - Executar as Migration
+            - Executar as Migration
                 - Update-Database
-              - Para o IISEXPRESS
-              - Rodar a aplicação para popular a base de dados
-                 - Haverá um erro da integridade referencial porque a tela de cadastro não contém o campo departamento para seleção
-              
+            - Para o IISEXPRESS
+            - Rodar a aplicação para popular a base de dados
+            - Haverá um erro da integridade referencial porque a tela de cadastro não contém o campo departamento para seleção
+
+    11 - Criando um select para selecionar o departamento no cadastro de vendedores
+       - Criar um ViewModel (para definir nele os dados que vão trafegar na tela)
+        
+        - 1 Criar um DepartmentService com o método FindAll (Para retornar os departamentos da tela de vendedor)
+            - Criar a classe, adicionar o atributo SalesWebMvcContext, recebê-lo no construtor
+        
+        - 2 No Startup.cs registrar o DepartmentService no sistema de injeção de dependência.
+        - 3 Criar a classe SellerFormViewModel - Classe que terá todos os dados para o cadastro de vendedores
+            - Em Models -ViewModels, criar a classe
+            - Adicionar os dados necessário para o cadastro de vendedores ex.: propiedade Seller e outra de ICollection<Department>
+
+        - 4 No SellersController, adicionar uma depêndencia para o DepartmentService   
+            - Criar o atributo privado, somente leitura e injetá-lo no construtor
+            - No método Create, 
+                - Criar a lista de departamentos, utilizar o método FindAll() criado na DepartmentService utilizando o objeto injetado
+                - Criar um objeto SellerFormViewModel e atribuir a lista de departamentos a propriedade departments
+                - Passar o viewModel por parâmetro para a view
+        - 5 Em views/Sellers/Create:
+                - Atualizar o model para o tipo SellerFormViewModel
+                    de:   @model SalesWebMvc.Models.Seller
+                    para: @model SalesWebMvc.Models.ViewModels.SellerFormViewModel
+
+                - Atualizar os campos do form
+                    de: asp-for="Name"
+                    para: asp-for="Seller.Name"
+
+                - Adicionar o componente Select para os Departments, o select vai ser ligado ao atributo DepartmentId do vendedor
+                    - O componente select contém o tag-helper novo asp-items que contém um new SelectList que contém 3 argumentos
+                        Model.Departments - lista de departamentos do viewModel, fonte de dados
+                        "Id" - campo id do model (chave)
+                        "Name" - Qual o argumento que aparecerá na caixinha
+
+                        
  *  ===============================================
  */
