@@ -321,7 +321,7 @@ namespace WebApplication1
             - Haverá um erro da integridade referencial porque a tela de cadastro não contém o campo departamento para seleção
 
     11 - Criando um select para selecionar o departamento no cadastro de vendedores
-       - Criar um ViewModel (para definir nele os dados que vão trafegar na tela)
+       - Criar um ViewModel (para definir nele todos os dados que vão trafegar na tela, de todas as entidades necessárias)
         
         - 1 Criar um DepartmentService com o método FindAll (Para retornar os departamentos da tela de vendedor)
             - Criar a classe, adicionar o atributo SalesWebMvcContext, recebê-lo no construtor
@@ -347,11 +347,61 @@ namespace WebApplication1
                     para: asp-for="Seller.Name"
 
                 - Adicionar o componente Select para os Departments, o select vai ser ligado ao atributo DepartmentId do vendedor
-                    - O componente select contém o tag-helper novo asp-items que contém um new SelectList que contém 3 argumentos
+                    - O componente select contém o tag-helper asp-items que contém um new SelectList que contém 3 argumentos
                         Model.Departments - lista de departamentos do viewModel, fonte de dados
                         "Id" - campo id do model (chave)
                         "Name" - Qual o argumento que aparecerá na caixinha
+    
+    12 - Delete Seller - Excluindo um vendedor
+        - No SellerService, criar as operações de FindById e Remove
+        - No SellerController, criar a ação Delete com GET (Ação para solicitar a confirmação)
+        - Na página View/Sellers/Index, verificar o link para a ação Delete
+            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>  <- Deve estar assim
+        - Criar a tela de Confirmação de deleção: View/Sellers/Delete  (Delete - Igual ao nome do método no controler)
+            - na pasta Views/Sellers botão direito criar view, escolher razor view
+            - Na próxima tela colocar o nome da view = Delete, modelo vazio, ok
+            - Na view Criada, especificar o Módel
+            - Criar o formulário utilizando o model, tag-helpers e bootstrap
+               - adicionar um formulário para conter um campo hidden com o id, um botão submit para postar e 
+                 um link para voltar a listagem.
+            
+                <dl class="dl-horizontal">
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
 
-                        
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.Email)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BirthDate)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BirthDate)
+                    </dd>
+                    <dt>
+                        @Html.DisplayNameFor(model => model.BaseSalary)
+                    </dt>
+                    <dd>
+                        @Html.DisplayFor(model => model.BaseSalary)
+                    </dd>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <input type="submit" value="Delete" class="btn btn-danger" />
+                        <a asp-action="Index">Back to List</a>
+                    </form>
+                </dl>
+
+            - Criar a Ação Delete com o método POST no controller
+                
+
  *  ===============================================
  */
