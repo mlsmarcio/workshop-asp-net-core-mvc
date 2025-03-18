@@ -401,7 +401,29 @@ namespace WebApplication1
                 </dl>
 
             - Criar a Ação Delete com o método POST no controller
-                
+
+    13 - Seller details and eager loading que é uma técnica usada no Entity Framework Core para carregar dados relacionados a uma entidade de 
+         forma antecipada, evitando múltiplas consultas ao banco de dados            
+        
+        - Em View/Sellers/Index, verifique o link para a ação 'Details'
+        - No controller, criar a ação Details GET que recebe por parâmetro o id opcional
+            Verifica se o id é válido
+            cria um vendedor utilizando o objeto _sellerService com o método FindById()
+            Passar o objeto obtido por parâmetro na view
+            
+        - Criar a view em, View/Sellers/Details
+            Usar o model Seller
+            Criar o formulário
+            Adicionar os botôes Editar e Voltar para a lista
+            Como o departamento do vendedor não está sendo exibido, será utilizado o eager loading
+
+        - Incluir no FindAll: 
+            Include(obj => obj.Department)  // namespace: Microsoft.EntityFrameworkCore
+
+            - No método SellerService.FindById adicionar a função Include:
+                de          return _context.Seller.FirstOrDefault(obj => obj.Id == id);
+                para        return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
+
 
  *  ===============================================
  */
