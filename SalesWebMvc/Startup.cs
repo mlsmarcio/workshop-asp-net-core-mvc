@@ -424,6 +424,34 @@ namespace WebApplication1
                 de          return _context.Seller.FirstOrDefault(obj => obj.Id == id);
                 para        return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
 
-
+    14 - Update seller and custom service exception - Aualização do vendedor e exceção de serviço personalidado
+        - Criar as classes de exceções na pasta Services/Exceptions
+            - Criar NotFoundException e DbConcurrencyException
+        - No SellerService, criar o método Update
+            - Utilizar as classes de exceção do nível de serviço, lançando exceções quando necessário,
+              o controller terá que lidar com as exceções do nível de serviço,
+              já o serviço, vai lidar com as exceções do nível de acesso a dados como DbUpdateConcurrencyException.
+              Dessa forma a arquitetura Model, View, Controller
+            
+        - em View/Sellers/Index, verificar a ação Editar no link
+        - No controller, criar a ação Edit que vai ser o GET
+            - Receberá um id como argumento
+            - Validar se o id é null, se null postar para página de erros
+            - Recuperar o objeto seller utilizando o objeto _sellerService.findById(id)
+            - Verificar se o objeto foi recuperado, se não, postar para página de erro.
+            - obter a lista de departamentos utilizando o objeto _departmentService.FindAll()
+            - Criar o objeto SellerFormViewModel e atribuir o vendedor e os departamentos aos atributos desse objeto
+            - Passar o FormViewModel como argumento para a view
+            
+        - Criar a view em View/Sellers/Edit (similar ao Create, adicionar um campo hidden para o id)
+            - Criar a view
+            - Colar o código da view Create
+            - Mudar o título da página para Edit
+            - Mudar a ação da tag form para Edit
+            - Mudar o texto do botão de Create para Save
+            - Adicionar o campo oculto abaixo da tag form
+         
+        -  No controller, criar a ação Edit com método POST
+            -
  *  ===============================================
  */
