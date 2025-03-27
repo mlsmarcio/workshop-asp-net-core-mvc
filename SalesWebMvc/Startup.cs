@@ -13,6 +13,8 @@ using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using SalesWebMvc.Data;
 using SalesWebMvc.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace WebApplication1
 {
@@ -56,6 +58,16 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService)
         {
+            // Configurando o locale padrão dos EUA
+            var enUS = new CultureInfo("en-US");
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(enUS),
+                SupportedCultures = new List<CultureInfo> { enUS },
+                SupportedUICultures = new List<CultureInfo> { enUS }
+            };
+            app.UseRequestLocalization(localizationOptions);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -452,6 +464,19 @@ namespace WebApplication1
             - Adicionar o campo oculto abaixo da tag form
          
         -  No controller, criar a ação Edit com método POST
-            -
+       
+    15 - App locale, number and date formatting - Definir o local da aplicação e formatar datas e números
+        - No Startup.cs, definir as opções de localização no método Configure
+        - No Model.Seller:
+            - Definir rótulos personalizados [Display]
+                Permite melhorar os nomes dos campos dos formulários que são definidos com a notação Display
+                [Display(Name = "Birth Date")]
+
+            - Definir semantica para data [DataType]
+                [DataType(DataType.Date)]
+
+            - Definir display formats [DisplayFormat]
+                [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
+
  *  ===============================================
  */
