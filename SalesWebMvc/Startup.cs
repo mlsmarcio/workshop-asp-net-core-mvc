@@ -478,5 +478,39 @@ namespace WebApplication1
             - Definir display formats [DisplayFormat]
                 [DisplayFormat(DataFormatString ="{0:dd/MM/yyyy}")]
 
+    16 - Validation - Validação de campos
+        - In Seller, add validation annotations
+            [Required(ErrorMessage = "{0} required")]
+            [EmailAddress(ErrorMessage = "Enter a valid email")]
+            [Range(100.0, 50000.0, ErrorMessage = "{0} must be from {1} to {2}")]
+
+        - Update HTML for Create And Edit view - Atualizar o HTML para mostrar as mensagens no caso de erro de validação
+            
+            Opção que exibe as mensagens de erros em uma lista no início do formulário
+            Summary: 
+                <div asp-validation-summary="All" class="text-danger"></div>
+            
+                    Em View, Sellers, create.cshtml adicionar esse código em baixo da tag do formulário
+                    Adicionar o script no final do arquivo (view Create)
+                    @section Scripts {
+                        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+                    }
+            Opção que exibe a mensagem de erro abaixo de cada campo
+                <span asp-validation-for="Name" class="text-danger"></span>     
+
+            Adicionar as validações tanto no Create como no Edit
+
+        - Update application - Adicionar a validação também do lado do servidor
+            No controller, implementar as ações Create e Edit do POST, Adicionar:
+
+            if (!ModelState.IsValid)
+            {
+                var departments = _departmentService.FindAll();
+                var viewModel = new SellerFormViewModel { Seller = seller, Departments = departments };
+                return View(viewModel);
+            }
+            A validação funcionará mesmo com o javascript desabilitado
+
+                
  *  ===============================================
  */
