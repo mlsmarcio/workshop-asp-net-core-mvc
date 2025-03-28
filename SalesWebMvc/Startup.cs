@@ -511,6 +511,126 @@ namespace WebApplication1
             }
             A validação funcionará mesmo com o javascript desabilitado
 
+    17 - OPERAÇÕES ASSÍNCRONAS USANDO TASK (encapsula o processamento assíncrono)
+
+        - Para operações que são mais lentas, acesso a banco de dados, arquivos...
+            
+            - Atualizar as classes Service, na assinatura do método:
+                - Colocar o sufixo Async no nome do método ( Padrão C# )
+                - O retorno deve ser modificado, se é um List<Department> modificar para Task<List<Department>>
+                - Adicionar a palavra async
+
+                    de      public List<Deparment> FindAll()
+                    para    public async Task<List<Department>> FindAllAsync()
+
+                - Atualizar o conteúdo do método para utilizar métodos async e também adicionar a palavra await
+            
+                    de      return _context.Department.OrderBy(x => x.Name).ToList();
+                    para    return await _context.Department.OrderBy(x => x.Name).ToListAsync();
+            
+                - Exemplo para método Insert (Classe SellerService)
+                    public void Insert(Seller obj)
+                    public Async Task InsertAsync(Seller obj)
+
+                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
+
+                - Exemplo para o método FindById
+
+                    public Seller FindById(int id)
+                    public async Task<Seller> FindByIdAsync(int id)
+
+                    return  _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
+                    return await _context.Seller.Include(obj => obj.Department).FirstOrDefaultAsync(obj => obj.Id == id);
+            
+                - Exemplo método Remove
+
+                    public void Remove(int id)
+                    public async Task RemoveAsync(int id)
+
+                    var obj = await _context.Seller.FindAsync(id);
+                    _context.Seller.Remove(obj);
+                    await _context.SaveChangesAsync();
+
+                    var obj = _context.Seller.Find(id);
+                    _context.Seller.Remove(obj);
+                    _context.SaveChanges();
+
+                - Exemplo método update
+            
+                    public void Update(Seller obj)
+                    public async Task UpdateAsync(Seller obj)
+
+                    var hasAny = _context.Seller.Any(x => x.Id == obj.Id);
+                    var hasAny = await _context.Seller.AnyAsync(x => x.Id == obj.Id);
+
+                    _context.Update(obj);
+                    _context.SaveChanges();
+
+                    _context.Update(obj);
+                    await _context.SaveChangesAsync();
+
+            - Atualizar as Classes Controller
                 
+                - Método Index
+
+                    public IActionResult Index()
+                    var list = _sellerService.FindAll();
+
+                    public async Task<IActionResult> Index()
+                    var list = await _sellerService.FindAllAsync();
+
+                - Método Create (GET)
+
+                    public IActionResult Create()
+                    var departments = _departmentService.FindAll();
+                    
+                    public async Task<IActionResult> Create()
+                    var departments = await _departmentService.FindAllAsync();
+ 
+                - Método Create (POST)
+
+                    public IActionResult Create(Seller seller)
+                    var departments = _departmentService.FindAll();
+                    _sellerService.Insert(seller);
+
+                    public async Task<IActionResult> Create(Seller seller)
+                    var departments = await _departmentService.FindAllAsync();
+                    await _sellerService.InsertAsync(seller);
+        
+                - Método Delete (GET)
+
+                    public IActionResult Delete(int? id)
+                    var obj = _sellerService.FindById(id.Value);
+
+                    public async Task<IActionResult> Delete(int? id)
+                    var obj = await _sellerService.FindByIdAsync(id.Value);
+
+                - Método Delete (POST)
+
+                    public IActionResult Delete(int id)
+                    _sellerService.Remove(id);
+
+                    public async Task<IActionResult> Delete(int id)
+                    await _sellerService.RemoveAsync(id);
+
+                - Método Details
+
+                    public IActionResult Details(int? id)
+                    var obj = _sellerService.FindBy(id.Value);
+
+                    public async Task<IActionResult> Details(int? id)
+                    var obj = await _sellerService.FindByIdAsync(id.Value);
+                
+                - Método Edit (GET)
+
+                    public IActionResult Edit(int? id)
+                    var obj = _sellerService.FindById(id.Value);
+                    List<Department> departments = _departmentService.FindAll();
+
+                    public async Task<IActionResult> Edit(int? id)
+                    var obj = await _sellerService.FindByIdAsync(id.Value);
+                    List<Department> departments = await _departmentService.FindAllAsync();
+
  *  ===============================================
  */
