@@ -632,5 +632,12 @@ namespace WebApplication1
                     var obj = await _sellerService.FindByIdAsync(id.Value);
                     List<Department> departments = await _departmentService.FindAllAsync();
 
+    18 - Tratamento de exceção para violação de chave estrangeira
+
+        - Criar uma exceção personalizada de serviço IntegrityException
+        - No SellerService, no método RemoveAsync, vamos interceptar a exceção DbUpdateException, que é a exeção que o framework lança
+          quando ocorre a violação da integridade referêncial. Vamos lançar nossa exeção que acabamos de criar IntegrityException.
+        -
+
  *  ===============================================
  */
