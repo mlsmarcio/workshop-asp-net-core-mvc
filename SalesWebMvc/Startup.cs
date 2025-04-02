@@ -639,5 +639,24 @@ namespace WebApplication1
           quando ocorre a violação da integridade referêncial. Vamos lançar nossa exeção que acabamos de criar IntegrityException.
         -
 
+    19 - Preparing sales search navigation views - Preparar a navegação das telas de busca 
+        
+        - Create SalesRecordsController with Index, SimpleSearch and GroupingSearch action. (O nome do controller deve ser o nome do Model + s + Controller)
+            Criar o controller SalesRecordsController com as ações citadas
+
+        - Create folder Views/SalesRecords (O nome da view deve ser igual ao nome do controller 'SalesRecords'
+            Criar a pasta para a view
+
+        - Create Index view with Search forms
+            Criar a view - botão direito, add view, view razor, nome = Index
+            Criar formulários para as ações criadas no controller SimpleSearch e GroupingSearch
+            
+        - Create "Sales" link on main navbar
+            Em _Layout.cshtml implementar o link Sales logo após Sellers
+            Colocar o nome do controlador e da ação: <li><a asp-area="" asp-controller="SalesRecords" asp-action="Index">Sales</a></li>
+            Executar a aplicação para testar se chamará a view
+        
+        - Create views SimpleSearch e GroupingSearch
+            Na pasta Views, SalesRecords, botão direito, add, view, colocar o nome da view
  *  ===============================================
  */
