@@ -1,14 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using SalesWebMvc.Data;
@@ -53,6 +49,8 @@ namespace WebApplication1
 
             // REGISTRANDO O SERVIÇO DEPARTMENT
             services.AddScoped<DepartmentService>();
+
+            services.AddScoped<SalesRecordService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -658,5 +656,28 @@ namespace WebApplication1
         
         - Create views SimpleSearch e GroupingSearch
             Na pasta Views, SalesRecords, botão direito, add, view, colocar o nome da view
+
+    20 - Implementando busca simples - 
+        - Create SalesRecordService with FindByDate operation
+            Declarar uma dependência para o entity framework (atributo que é recebido no construtor)
+            Criar a operação FindByDate que recebe as duas datas
+            Construir um objeto IQueryAble, pode ser criada consulta em cima dele, a partir do dbContext
+
+        - In Startup.cs, register SalesRecordService to dependency injection system
+            No método configureServices, adicionar:
+            services.AddScoped<SalesRecordService>();
+
+        - In SalesRecordsController, update SimpleSearch action
+            Declarar a dependência do Service (SalesRecordService), criar um atributo que recebe o parâmetro no construtor.
+            utilizála para obter o retorno do método FindByDateAsync
+
+        - Update SimpleSearch view
+            Se não especificar no formulário qual a ação que ele fará a requisição, então, será feito para a ação vinculada a view que é SimpleSearch
+            para especificar a ação:   <a asp-action="Index">Back to List</a>
+            Registrar as datas para permanecer nos campos
+                O controlador terá que enviar essas datas para a view
+        - Optional: format SalesRecord date and number
+
+        
  *  ===============================================
  */
