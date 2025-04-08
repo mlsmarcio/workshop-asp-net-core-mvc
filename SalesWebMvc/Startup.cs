@@ -676,8 +676,27 @@ namespace WebApplication1
             para especificar a ação:   <a asp-action="Index">Back to List</a>
             Registrar as datas para permanecer nos campos
                 O controlador terá que enviar essas datas para a view
-        - Optional: format SalesRecord date and number
+                    if (!minDate.HasValue)
+                    {
+                        minDate = new DateTime(DateTime.Now.Year, 1, 1);
+                    }
+                    if (!maxDate.HasValue)
+                    {
+                        maxDate = DateTime.Now;
+                    }
 
+                    ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+                    ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+                
+                Na view obter o valor da seguinte forma:
+                    <input type="date" class="form-control" name="maxDate" value=@ViewData["maxDate"] />
+
+        - Optional: format SalesRecord date and number
+        
+        Implementing grouping search
+            - In SalesRecordService create FindByDateGrouping operation
+            - In SalesRecordsController, Update GroupingSearch action
+            - Update GroupingSearch view
         
  *  ===============================================
  */
