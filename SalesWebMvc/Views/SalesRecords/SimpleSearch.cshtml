@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SalesWebMvc.Models.SalesRecord>
+﻿@model SalesWebMvc.Models.ViewModels.SalesRecordViewModel
+    <!-- IEnumerable<SalesWebMvc.Models.SalesRecord>-->
+
 
 @{
     ViewData["Title"] = "Simple Search";
@@ -21,38 +23,41 @@
             </div>
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
+        
+
     </div>
 </nav>
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Total sales = @Model.Sum(obj => obj.Amount).ToString("F2")</h3>
+        <h3 class="panel-title">Total sales = @Model.SalesRecords.Sum(obj => obj.Amount).ToString("F2")</h3>
     </div>
     <div class="panel-body">
         <table class="table table-striped table-hover">
             <thead>
                 <tr class="success">
                     <th>
-                        @Html.DisplayNameFor(model => model.Id)
+                        @*@Html.DisplayNameFor(model => model.Id)*@
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Id)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Date)
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Date)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Seller)
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Seller)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Seller.Department)
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Seller.Department)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Amount)
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Amount)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Status)
+                        @Html.DisplayNameFor(model => model.SalesRecords.First().Status)
                     </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.SalesRecords)
                 {
                     <tr>
                         <td>
@@ -74,8 +79,41 @@
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                     </tr>
-}
+                }
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <li><a asp-action="SimpleSearch" asp-route-page="@(Model.CurrentPage - 1)" asp-route-minDate="@Model.MinDate?.ToString("yyyy-MM-dd")" asp-route-maxDate="@Model.MaxDate?.ToString("yyyy-MM-dd")">Anterior</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><span>Anterior</span></li>
+                }
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    if (i == Model.CurrentPage)
+                    {
+                        <li class="active"><span>@i</span></li>
+                    }
+                    else
+                    {
+                        <li><a asp-action="SimpleSearch" asp-route-page="@i" asp-route-minDate="@Model.MinDate?.ToString("yyyy-MM-dd")" asp-route-maxDate="@Model.MaxDate?.ToString("yyyy-MM-dd")">@i</a></li>
+                    }
+                }
+
+                @if (Model.HasNextPage)
+                {
+                    <li><a asp-action="SimpleSearch" asp-route-page="@(Model.CurrentPage + 1)" asp-route-minDate="@Model.MinDate?.ToString("yyyy-MM-dd")" asp-route-maxDate="@Model.MaxDate?.ToString("yyyy-MM-dd")">Próxima</a></li>
+                }
+                else
+                {
+                    <li class="disabled"><span>Próxima</span></li>
+                }
+            </ul>
+        </nav>
     </div>
 </div>
