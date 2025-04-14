@@ -2,6 +2,7 @@
 using SalesWebMvc.Models.ViewModels;
 using SalesWebMvc.Services;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SalesWebMvc.Controllers
@@ -67,22 +68,47 @@ namespace SalesWebMvc.Controllers
         //    return View(result);
         //}
 
-        public async Task<IActionResult> GroupingSearch(DateTime? minDate, DateTime? maxDate)
+
+        // VERSÃO SEM SCROLL DINÂMICO
+        //public async Task<IActionResult> GroupingSearch(DateTime? minDate, DateTime? maxDate)
+        //{
+        //    if (!minDate.HasValue)
+        //    {
+        //        minDate = new DateTime(DateTime.Now.Year, 1, 1);
+        //    }
+        //    if (!maxDate.HasValue)
+        //    {
+        //        maxDate = DateTime.Now;
+        //    }
+
+        //    ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+        //    ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+
+        //    var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
+        //    return View(result);
+        //}
+
+        // ACTION PRINCIPAL: CARREGA O LAYOUT E AS DATAS
+        public IActionResult GroupingSearch(DateTime? minDate, DateTime? maxDate)
         {
-            if (!minDate.HasValue)
-            {
-                minDate = new DateTime(DateTime.Now.Year, 1, 1);
-            }
-            if (!maxDate.HasValue)
-            {
-                maxDate = DateTime.Now;
-            }
+            if (!minDate.HasValue) minDate = new DateTime(DateTime.Now.Year, 1, 1);
+            if (!maxDate.HasValue) maxDate = DateTime.Now;
 
             ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
             ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
 
-            var result = await _salesRecordService.FindByDateGroupingAsync(minDate, maxDate);
-            return View(result);
+            return View(); // view vazia, só estrutura, carregará por JS
+        }
+
+        // ACTION PARCIAL: CHAMA VIA AJAX
+        public async Task<IActionResult> LoadGroupedSales(DateTime? minDate, DateTime? maxDate, int skip = 0, int take = 1)
+        {
+            var pageGroups = await _salesRecordService.FindByDateGroupingPagedAsync(minDate, maxDate, skip, take);
+
+            ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
+            ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+
+            return PartialView("GroupedSalesPartial", pageGroups);
         }
 
     }

@@ -16,6 +16,7 @@ namespace SalesWebMvc.Services
             _context = context;
         }
 
+        // VERSÃO COM PAGINAÇÃO
         public async Task<(List<SalesRecord> Records, int TotalCount)> FindByDatePageAsync(DateTime? minDate, DateTime? maxDate, int pageNumber, int pageSize)  // ? para argumentos opcionais
         {
 
@@ -66,6 +67,7 @@ namespace SalesWebMvc.Services
 
         }
 
+        // VERSÃO SEM PAGINAÇÃO
         public async Task<List<IGrouping<Department, SalesRecord>>> FindByDateGroupingAsync(DateTime? minDate, DateTime? maxDate)  // ? para argumentos opcionais
         {
             // CONSTRUINDO UM OBJETO IQueryable - permite construir as consultas em cima dele, apartir do DBContext usando link
@@ -89,5 +91,34 @@ namespace SalesWebMvc.Services
                 .ToListAsync();
             //.ToList();
         }
+
+        // VERSÃO COM PAGINAÇÃO
+        public async Task<List<IGrouping<Department, SalesRecord>>> FindByDateGroupingPagedAsync(
+            DateTime? minDate, DateTime? maxDate, int skip, int take)
+        {
+            var result = _context.SalesRecord.AsQueryable();
+
+            if (minDate.HasValue)
+                result = result.Where(x => x.Date >= minDate.Value);
+
+            if (maxDate.HasValue)
+                result = result.Where(x => x.Date <= maxDate.Value);
+
+            // Faz o Include e ToListAsync antes do agrupamento
+            var data = await result
+                .Include(x => x.Seller)
+                .ThenInclude(s => s.Department)
+                .OrderByDescending(x => x.Date)
+                .ToListAsync();
+
+            // Agrupa em memória
+            var grouped = data.GroupBy(x => x.Seller.Department)
+                              .Skip(skip)
+                              .Take(take)
+                              .ToList();
+
+            return grouped;
+        }
+
     }
 }
