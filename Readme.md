@@ -4,7 +4,7 @@ Este é um projeto de introdução ao **ASP.NET Core MVC** utilizando a linguagem *
 
 ---
 
-## ? Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **.NET Core 2.1**
 - **Visual Studio Community 2019**
@@ -14,11 +14,11 @@ Este é um projeto de introdução ao **ASP.NET Core MVC** utilizando a linguagem *
 
 ---
 
-## ?? Descrição do Projeto
+## Descrição do Projeto
 
 O sistema simula uma aplicação de cadastro e controle de vendedores vinculados a departamentos, com registro e consulta de vendas.
 
-### ?? Funcionalidades:
+### Funcionalidades:
 
 - **CRUD completo de Vendedores**
   - Listagem com opções para:
@@ -29,28 +29,39 @@ O sistema simula uma aplicação de cadastro e controle de vendedores vinculados a
 
 - **Consulta de Vendas**
   - Busca **simples**
-    - Paginação simples (com paginação tradicional)
+    - Paginação simples (paginação tradicional)
+    
   - Busca **agrupada por departamento**
     - Paginação por demanda (scroll dinâmico)
-    - ?? *Este recurso foi adicionado além do conteúdo do curso original.*
+    
+  - *Estes recursos de paginação foram adicionados ao conteúdo dado no curso.*
 
 ---
 
-## ??? Estrutura Relacional
+## Estrutura Relacional
 
 - Cada **vendedor** pertence a um **departamento**.
 - Cada **venda** está relacionada a um **vendedor**.
 
 ---
 
-## ?? Imagens do Projeto
+## Imagens do Projeto
 
-*(Adicione capturas de tela das telas de CRUD e busca, se desejar)*
+### Tela de Listagem de Vendedores
+![Tela de Listagem](SalesWebMvc/wwwroot/images/Vendedores.PNG)
 
 ---
 
-## ?? Como Executar
+## Como Executar
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
+   git clone https://github.com/mlsmarcio/workshop-asp-net-core-mvc.git
+
+Abra o projeto no Visual Studio 2019.
+
+Configure a string de conexão com o MySQL no appsettings.json.
+
+Aplique as migrations do Entity Framework:
+```bash
+Update-Database
