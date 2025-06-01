@@ -29,7 +29,7 @@ namespace SalesWebMvc.Controllers
             if (!maxDate.HasValue)
                 maxDate = DateTime.Now;
 
-            int pageSize = 10;
+            int pageSize = 5;
 
 
             ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
@@ -107,6 +107,10 @@ namespace SalesWebMvc.Controllers
 
             ViewData["minDate"] = minDate.Value.ToString("yyyy-MM-dd");
             ViewData["maxDate"] = maxDate.Value.ToString("yyyy-MM-dd");
+
+            // Pega o último grupo carregado para evitar repetição (quando a primeira vez não envia o departamento)
+            var previousDepartment = (skip == 0 ?"" :pageGroups.FirstOrDefault()?.Key.Name);
+            ViewData["lastDepartment"] = previousDepartment;
 
             return PartialView("GroupedSalesPartial", pageGroups);
         }

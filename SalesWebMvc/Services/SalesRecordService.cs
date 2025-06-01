@@ -19,7 +19,6 @@ namespace SalesWebMvc.Services
         // VERSÃO COM PAGINAÇÃO
         public async Task<(List<SalesRecord> Records, int TotalCount)> FindByDatePageAsync(DateTime? minDate, DateTime? maxDate, int pageNumber, int pageSize)  // ? para argumentos opcionais
         {
-
             var result = _context.SalesRecord.AsQueryable();
 
             if (minDate.HasValue)
@@ -96,28 +95,52 @@ namespace SalesWebMvc.Services
         public async Task<List<IGrouping<Department, SalesRecord>>> FindByDateGroupingPagedAsync(
             DateTime? minDate, DateTime? maxDate, int skip, int take)
         {
-            var result = _context.SalesRecord.AsQueryable();
+            var query = _context.SalesRecord
+               .Include(x => x.Seller)
+               .ThenInclude(s => s.Department)
+               .AsQueryable();
 
             if (minDate.HasValue)
-                result = result.Where(x => x.Date >= minDate.Value);
-
+                query = query.Where(x => x.Date >= minDate.Value);
             if (maxDate.HasValue)
-                result = result.Where(x => x.Date <= maxDate.Value);
+                query = query.Where(x => x.Date <= maxDate.Value);
 
-            // Faz o Include e ToListAsync antes do agrupamento
-            var data = await result
-                .Include(x => x.Seller)
-                .ThenInclude(s => s.Department)
-                .OrderByDescending(x => x.Date)
+            var all = await query
+                .OrderBy(x => x.Seller.Department.Name)
+                .ThenBy(x => x.Date)
                 .ToListAsync();
 
-            // Agrupa em memória
-            var grouped = data.GroupBy(x => x.Seller.Department)
-                              .Skip(skip)
-                              .Take(take)
-                              .ToList();
+            var allGrouped = all
+                .GroupBy(x => x.Seller.Department)
+                .ToList();
 
-            return grouped;
+            var pagedItems = new List<SalesRecord>();
+            int skipped = 0;
+            foreach (var group in allGrouped)
+            {
+                foreach (var item in group)
+                {
+                    if (skipped < skip)
+                    {
+                        skipped++;
+                        continue;
+                    }
+
+                    if (pagedItems.Count >= take)
+                        break;
+
+                    pagedItems.Add(item);
+                }
+
+                if (pagedItems.Count >= take)
+                    break;
+            }
+
+            // Agrupar os itens que foram paginados
+            var result = pagedItems
+                .GroupBy(x => x.Seller.Department)
+                .ToList();
+            return result;
         }
 
     }
