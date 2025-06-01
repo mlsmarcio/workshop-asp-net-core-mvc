@@ -54,7 +54,7 @@ O sistema simula uma aplicação de cadastro e controle de vendedores vinculados a
 ![Tela de Busca](./images/BuscaDeVendas.PNG)
 
 ### Tela de Listagem de Vendas - Com paginação
-![Tela de Busca](./images/BuscaSimplesComPaginação.PNG)
+![Tela de Busca](./wwwroot/images/BuscaSimplesComPaginação.PNG)
 
 ### Tela de Listagem Agrupada por Departamento - Com paginação por demanda
 ![Tela de Busca](SalesWebMvc/wwwroot/images/BuscaAgrupadaComPaginacaoScroll.PNG)
