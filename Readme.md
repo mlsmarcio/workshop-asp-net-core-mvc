@@ -48,13 +48,13 @@ O sistema simula uma aplicação de cadastro e controle de vendedores vinculados a
 ## Imagens do Projeto
 
 ### Tela de Listagem de Vendedores
-![Tela de Listagem](./images/Vendedores.PNG)
+![Tela de Listagem](SalesWebMvc/wwwroot/images/Vendedores.PNG)
 
 ### Tela de Busca de Vendas
-![Tela de Busca](./images/BuscaDeVendas.PNG)
+![Tela de Busca](SalesWebMvc/wwwroot/images/BuscaDeVendas.PNG)
 
 ### Tela de Listagem de Vendas - Com paginação
-![Tela de Busca](./wwwroot/images/BuscaSimplesComPaginação.PNG)
+![Tela de Busca](SalesWebMvc/wwwroot/images/BuscaSimplesComPaginação.PNG)
 
 ### Tela de Listagem Agrupada por Departamento - Com paginação por demanda
 ![Tela de Busca](SalesWebMvc/wwwroot/images/BuscaAgrupadaComPaginacaoScroll.PNG)
